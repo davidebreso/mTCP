@@ -1,2 +1,3 @@
-# mTCO
-Unofficial fork of https://www.brutman.com/mTCP
+# mTCP
+
+This is an unofficial fork of Michael B. Brutman's [mTCP](http://www.brutman.com/mTCP/). 
