@@ -16,9 +16,8 @@
 *.dylib
 *.dll
 
-# Fortran module files
-*.mod
-*.smod
+# Map files
+*.map
 
 # Compiled Static libraries
 *.lai
@@ -30,3 +29,4 @@
 *.exe
 *.out
 *.app
+utils/ptach

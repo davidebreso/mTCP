@@ -27,39 +27,39 @@
 
 # Make it fast.  But don't use -oe otherwise you'll need large model.
 
-tcp_h_dir = ..\..\TCPINC\
-tcp_c_dir = ..\..\TCPLIB\
-common_h_dir = ..\..\INCLUDE
+tcp_h_dir = ../../tcpinc/
+tcp_c_dir = ../../tcplib/
+common_h_dir = ../../include
 
 memory_model = -mc
-compile_options = -0 $(memory_model) -DCFG_H="spdtest.cfg" -oh -ok -ot -s -oa -ei -zp2 -zpw -we -ob -ol+ -oi+
+compile_options = -0 $(memory_model) -DCFG_H=\"spdtest.cfg\" -oh -ok -ot -s -oa -ei -zp2 -zpw -we -ob -ol+ -oi+
 compile_options += -i=$(tcp_h_dir) -i=$(common_h_dir)
 
 
-tcpobjs = packet.obj arp.obj eth.obj ip.obj tcp.obj tcpsockm.obj udp.obj utils.obj dns.obj timer.obj ipasm.obj trace.obj
-objs = spdtest.obj
+tcpobjs = packet.o arp.o eth.o ip.o tcp.o tcpsockm.o udp.o utils.o dns.o timer.o ipasm.o trace.o
+objs = spdtest.o
 
 all : clean spdtest.exe
 
 clean : .symbolic
-  @del spdtest.exe
-  @del *.obj
-  @del *.map
+  rm -f spdtest.exe
+  rm -f *.o
+  rm -f *.map
 
 patch : .symbolic
-  ..\..\utils\ptach spdtest.exe spdtest.map $(memory_model)
+  ../../utils/ptach spdtest.exe spdtest.map $(memory_model)
 
 .asm : $(tcp_c_dir)
 
 .cpp : $(tcp_c_dir)
 
-.asm.obj :
+.asm.o :
   wasm -0 $(memory_model) $[*
 
-.cpp.obj :
+.cpp.o :
   wpp $[* $(compile_options)
 
 
 spdtest.exe: $(tcpobjs) $(objs)
-  #wlink system dos option map option stack=4096 debug watcom name $@ file *.obj
-  wlink system dos option map option eliminate option stack=4096 name $@ file *.obj
+  #wlink system dos option map option stack=4096 debug watcom name $@ file {$(tcpobjs) $(objs)}
+  wlink system dos option map option eliminate option stack=4096 name $@ file {$(tcpobjs) $(objs)}

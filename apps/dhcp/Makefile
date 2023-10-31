@@ -25,36 +25,36 @@
 
 # For this code performance is not an issue.  Make it small.
 
-tcp_h_dir = ..\..\TCPINC\
-tcp_c_dir = ..\..\TCPLIB\
-common_h_dir = ..\..\INCLUDE
+tcp_h_dir = ../../tcpinc/
+tcp_c_dir = ../../tcplib/
+common_h_dir = ../../include
 
 memory_model = -ms
-compile_options = -0 $(memory_model) -DCFG_H="dhcp.cfg" -oh -ok -os -s -oa -ei -zp2 -zpw -we
+compile_options = -0 $(memory_model) -DCFG_H=\"dhcp.cfg\" -oh -ok -os -s -oa -ei -zp2 -zpw -we
 compile_options += -i=$(tcp_h_dir) -i=$(common_h_dir)
 
-tcpobjs = packet.obj eth.obj ip.obj udp.obj utils.obj timer.obj ipasm.obj trace.obj
-objs = dhcp.obj
+tcpobjs = packet.o eth.o ip.o udp.o utils.o timer.o ipasm.o trace.o
+objs = dhcp.o
 
 all : clean dhcp.exe
 
 clean : .symbolic
-  @del dhcp.exe
-  @del *.obj
-  @del *.map
+  @rm -f dhcp.exe
+  @rm -f *.o
+  @rm -f *.map
 
 patch : .symbolic
-  ..\..\utils\ptach dhcp.exe dhcp.map $(memory_model)
+  ../../utils/ptach dhcp.exe dhcp.map $(memory_model)
 
 .asm : $(tcp_c_dir)
 
 .cpp : $(tcp_c_dir)
 
-.asm.obj :
+.asm.o :
   wasm -0 $(memory_model) $[*
 
-.cpp.obj :
+.cpp.o :
   wpp $[* $(compile_options)
 
 dhcp.exe : $(tcpobjs) $(objs)
-  wlink system dos option map option eliminate option stack=4096 name $@ file *.obj
+  wlink system dos option map option eliminate option stack=4096 name $@ file {$(tcpobjs) $(objs)}

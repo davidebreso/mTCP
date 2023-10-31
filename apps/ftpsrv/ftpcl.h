@@ -47,6 +47,7 @@
 
 #include "ftpusr.h"
 
+#pragma pack(1)
 
 class FtpClient {
 

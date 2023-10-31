@@ -26,43 +26,43 @@
 # This code is not performance sensitive.  Do what you can, but don't bloat
 # it out and require us to move to a larger memory model.
 
-# To compile with Unicode support use wmake extra_objs=unicode.obj extra_opts=-DIRCJR_UNICODE.
+# To compile with Unicode support use wmake extra_objs=unicode.o extra_opts=-DIRCJR_UNICODE.
 # Note: Unicode support is standard now.  Delete the next two lines if you don't want it.
 
-extra_objs = unicode.obj
+extra_objs = unicode.o
 extra_opts = -DIRCJR_UNICODE
 
-tcp_h_dir = ..\..\TCPINC\
-tcp_c_dir = ..\..\TCPLIB\
-common_h_dir = ..\..\INCLUDE
+tcp_h_dir = ../../tcpinc/
+tcp_c_dir = ../../tcplib/
+common_h_dir = ../../include
 
 memory_model = -ml
-compile_options = -0 $(memory_model) -DCFG_H="irc.cfg" -oh -ok -os -s -oa -ei -zp2 -zpw -we -ob
+compile_options = -0 $(memory_model) -DCFG_H=\"irc.cfg\" -oh -ok -os -s -oa -ei -zp2 -zpw -we -ob
 compile_options += -i=$(tcp_h_dir) -i=$(common_h_dir)
 
-tcpobjs = packet.obj arp.obj eth.obj ip.obj tcp.obj tcpsockm.obj udp.obj utils.obj dns.obj timer.obj ipasm.obj trace.obj
-objs = irc.obj screen.obj session.obj $(extra_objs)
+tcpobjs = packet.o arp.o eth.o ip.o tcp.o tcpsockm.o udp.o utils.o dns.o timer.o ipasm.o trace.o
+objs = irc.o screen.o session.o $(extra_objs)
 
 all : clean ircjr.exe
 
 clean : .symbolic
-  @del ircjr.exe
-  @del *.obj
-  @del *.map
+  rm -f ircjr.exe
+  rm -f *.o
+  rm -f *.map
 
 patch : .symbolic
-  ..\..\utils\ptach ircjr.exe ircjr.map $(memory_model)
+  ../../utils/ptach ircjr.exe ircjr.map $(memory_model)
 
 .asm : $(tcp_c_dir)
 
 .cpp : $(tcp_c_dir)
 
-.asm.obj :
+.asm.o :
   wasm -0 $(memory_model) $[*
 
-.cpp.obj :
+.cpp.o :
   wpp $[* $(compile_options) $(extra_opts)
 
 
 ircjr.exe: $(tcpobjs) $(objs)
-  wlink system dos option map option eliminate option stack=4096 name $@ file *.obj
+  wlink system dos option map option eliminate option stack=4096 name $@ file {$(tcpobjs) $(objs)}

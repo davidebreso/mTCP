@@ -25,36 +25,36 @@
 
 # For this code performance is not an issue.  Make it small.
 
-tcp_h_dir = ..\..\TCPINC\
-tcp_c_dir = ..\..\TCPLIB\
-common_h_dir = ..\..\INCLUDE
+tcp_h_dir = ../../tcpinc/
+tcp_c_dir = ../../tcplib/
+common_h_dir = ../../include
 
 memory_model = -mc
-compile_options = -0 $(memory_model) -DCFG_H="pkttool.cfg" -s -oa -ob -oh -oi -ok -ol -ot -ei -zp1 -zpw -we
+compile_options = -0 $(memory_model) -DCFG_H=\"pkttool.cfg\" -s -oa -ob -oh -oi -ok -ol -ot -ei -zp1 -zpw -we
 compile_options += -i=$(tcp_h_dir) -i=$(common_h_dir)
 
-tcpobjs = packet.obj eth.obj trace.obj ethtype.obj iptype.obj
-objs = pkttool.obj
+tcpobjs = packet.o eth.o trace.o ethtype.o iptype.o
+objs = pkttool.o
 
 all : clean pkttool.exe
 
 clean : .symbolic
-  @del pkttool.exe
-  @del *.obj
-  @del *.map
+  rm -f pkttool.exe
+  rm -f *.o
+  rm -f *.map
 
 patch : .symbolic
-  ..\..\utils\ptach pkttool.exe pkttool.map $(memory_model)
+  ../../utils/ptach pkttool.exe pkttool.map $(memory_model)
 
 .asm : $(tcp_c_dir)
 
 .cpp : $(tcp_c_dir)
 
-.asm.obj :
+.asm.o :
   wasm -0 $(memory_model) $[*
 
-.cpp.obj :
+.cpp.o :
   wpp $[* $(compile_options)
 
 pkttool.exe : $(tcpobjs) $(objs)
-  wlink system dos option map option eliminate option stack=4096 name $@ file *.obj
+  wlink system dos option map option eliminate option stack=4096 name $@ file {$(tcpobjs) $(objs)}

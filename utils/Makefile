@@ -1,12 +1,11 @@
 
-all : clean ptach.exe
+all : clean ptach
 
 clean : .symbolic
-  @del ptach.exe
-  @del *.obj
-  @del *.map
+  rm -f ptach
+  rm -f *.o
+  rm -f *.map
 
-ptach.exe : patch.cpp
-  wcl386 patch.cpp
-  mv patch.exe ptach.exe
-  chmod 755 ptach.exe
+ptach : patch.cpp
+  gcc patch.cpp -o ptach
+

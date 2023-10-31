@@ -187,11 +187,11 @@ int main( int argc, char *argv[] ) {
       return 1;
     }
 
-    if ( stricmp( argv[3], "-ml" ) == 0 ) {
+    if ( strcasecmp( argv[3], "-ml" ) == 0 ) {
       buffer[0] = 0xcb;
       puts( "  Patching with a far return" );
     }
-    else if ( (stricmp( argv[3], "-mc" ) == 0) || (stricmp( argv[3], "-ms" ) == 0) ) {
+    else if ( (strcasecmp( argv[3], "-mc" ) == 0) || (strcasecmp( argv[3], "-ms" ) == 0) ) {
       buffer[0] = 0xc3;
       puts( "  Patching with a near return" );
     }
@@ -236,11 +236,11 @@ int main( int argc, char *argv[] ) {
 
     buffer[0] = 0xb8; buffer[1] = 0x0; buffer[2] = 0x0;
 
-    if ( stricmp( argv[3], "-ml" ) == 0 ) {
+    if ( strcasecmp( argv[3], "-ml" ) == 0 ) {
       buffer[3] = 0xcb;
       puts( "  Patching with a far return" );
     }
-    else if ( (stricmp( argv[3], "-mc" ) == 0) || (stricmp( argv[3], "-ms" ) == 0) ) {
+    else if ( (strcasecmp( argv[3], "-mc" ) == 0) || (strcasecmp( argv[3], "-ms" ) == 0) ) {
       buffer[3] = 0xc3;
       puts( "  Patching with a near return" );
     }

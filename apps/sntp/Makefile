@@ -22,36 +22,36 @@
 
 # For this code performance is not an issue.  Make it small.
 
-tcp_h_dir = ..\..\TCPINC\
-tcp_c_dir = ..\..\TCPLIB\
-common_h_dir = ..\..\INCLUDE
+tcp_h_dir = ../../tcpinc/
+tcp_c_dir = ../../tcplib/
+common_h_dir = ../../include
 
 memory_model = -ms
-compile_options = -0 $(memory_model) -DCFG_H="sntp.cfg" -oh -ok -os -s -oa -ei -zp2 -zpw -we
+compile_options = -0 $(memory_model) -DCFG_H=\"sntp.cfg\" -oh -ok -os -s -oa -ei -zp2 -zpw -we
 compile_options += -i=$(tcp_h_dir) -i=$(common_h_dir)
 
-tcpobjs = packet.obj arp.obj eth.obj ip.obj utils.obj timer.obj ipasm.obj udp.obj dns.obj trace.obj sntplib.obj
-objs = sntp.obj
+tcpobjs = packet.o arp.o eth.o ip.o utils.o timer.o ipasm.o udp.o dns.o trace.o sntplib.o
+objs = sntp.o
 
 all : clean sntp.exe
 
 clean : .symbolic
-  @del sntp.exe
-  @del *.obj
-  @del *.map
+  rm -f sntp.exe
+  rm -f *.o
+  rm -f *.map
 
 patch : .symbolic
-  ..\..\utils\ptach sntp.exe sntp.map $(memory_model)
+  ../../utils/ptach sntp.exe sntp.map $(memory_model)
 
 .asm : $(tcp_c_dir)
 
 .cpp : $(tcp_c_dir)
 
-.asm.obj :
+.asm.o :
   wasm -0 $(memory_model) $[*
 
-.cpp.obj :
+.cpp.o :
   wpp $[* $(compile_options)
 
 sntp.exe : $(tcpobjs) $(objs)
-  wlink system dos option map option eliminate option stack=4096 name $@ file *.obj
+  wlink system dos option map option eliminate option stack=4096 name $@ file {$(tcpobjs) $(objs)}
