@@ -47,8 +47,6 @@
 
 #include "ftpusr.h"
 
-#pragma pack(1)
-
 class FtpClient {
 
   public:
@@ -113,7 +111,7 @@ class FtpClient {
     char             filespec[DOS_MAX_PATHFILE_LENGTH];
 
     struct find_t    fileinfo;
-    uint8_t          padding2;
+    // uint8_t          padding2;
 
     FILE            *file;
 
