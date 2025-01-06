@@ -344,9 +344,11 @@ void FtpClient::sendOutput( void ) {
 
 static void FtpClient::checkClients( void ) {
 
+  #ifdef __SMALL__
   if ( _heapchk( ) != _HEAPOK ) {
     TRACE_WARN(( "checkClient: heap is corrupted\n" ));
   }
+  #endif
 
   if ( (activeClients + freeClients) != allocatedClients ) {
     TRACE_WARN(( "checkClient: Number of active and free clients doesn't add up: Active: %u  Free: %u\n",

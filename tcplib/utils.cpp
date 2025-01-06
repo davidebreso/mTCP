@@ -1053,9 +1053,11 @@ void Utils::endStack2( bool ignoreTracing ) {
   #endif
 
 
+  #ifdef __SMALL__
   if ( _heapchk( ) != _HEAPOK ) {
     fprintf( stderr, "End: heap is corrupted!\n" );
   }
+  #endif
 
 
   if ( ignoreTracing == false ) {
