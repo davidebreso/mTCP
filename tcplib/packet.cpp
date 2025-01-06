@@ -1,7 +1,7 @@
 /*
 
    mTCP Packet.cpp
-   Copyright (C) 2005-2023 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2005-2024 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -145,7 +145,7 @@ int8_t Buffer_init( void ) {
   // We are using malloc here, which allows us to allocate up to 64K of
   // data in a single call.  (The parameter to it is an unsigned int.)
 
-  uint8_t *tmp = (uint8_t *)(malloc( PACKET_BUFFERS * PACKET_BUFFER_LEN ));
+  uint8_t *tmp = (uint8_t *)(mTCP_malloc( PACKET_BUFFERS * PACKET_BUFFER_LEN, "LIB_Packet_bufs") );
   if ( tmp == NULL ) {
     return -1;
   }
@@ -429,6 +429,10 @@ _asm {
 // from it.
 
 int8_t Packet_init( uint8_t packetInt ) {
+  return Packet_init2( packetInt, FP_SEG( receiver ), FP_OFF( receiver ) );
+}
+
+int8_t Packet_init2( uint8_t packetInt, uint16_t recv_seg, uint16_t recv_off ) {
 
   uint16_t far *intVector = (uint16_t far *)MK_FP( 0x0, packetInt * 4 );
 
@@ -440,7 +444,7 @@ int8_t Packet_init( uint8_t packetInt ) {
   eyeCatcher += 3; // Skip three bytes of executable code
 
   if ( _fmemcmp( PKT_DRVR_EYE_CATCHER, eyeCatcher, 8 ) != 0 ) {
-    TRACE_WARN(( "Packet: eye catcher not found at %x\n", packetInt ));
+    TRACE_WARN(( "Packet: eye catcher not found at 0x%X\n", packetInt ));
     return -1;
   }
 
@@ -452,17 +456,17 @@ int8_t Packet_init( uint8_t packetInt ) {
   inregs.h.al = 0x1;                 // Interface class (ethernet)
   inregs.x.bx = 0xFFFF;              // Interface type (card/mfg)
   inregs.h.dl = 0;                   // Interface number (assume 0)
-  segregs.ds = FP_SEG( NULL );       // Match all EtherTypes
-  inregs.x.si = FP_OFF( NULL );
-  inregs.x.cx = 0;
-  segregs.es = FP_SEG( receiver );   // Receiver function
-  inregs.x.di = FP_OFF( receiver );
+  segregs.ds =  0;                   // Match all EtherTypes (DS:SI = 0)
+  inregs.x.si = 0;
+  inregs.x.cx = 0;                   // Length of EtherTypes to match if not matching all
+  segregs.es = recv_seg;             // Receiver segment
+  inregs.x.di = recv_off;            // Receiver offset
 
   int86x( packetInt, &inregs, &outregs, &segregs );
 
   if ( outregs.x.cflag ) {
     TRACE_WARN(( "Packet: %u error on access_type call\n", outregs.h.dh ));
-    return outregs.h.dh;
+    return -2;
   }
 
   Packet_int = packetInt;
@@ -471,6 +475,7 @@ int8_t Packet_init( uint8_t packetInt ) {
   return 0;
 
 }
+
 
 
 int8_t Packet_release_type( void ) {
@@ -685,3 +690,7 @@ uint8_t  Packet_getSoftwareInt( void ) { return Packet_int; }
 // only pkttool.cpp needs to do this.
 
 uint16_t Packet_getHandle( void ) { return Packet_handle; }
+
+void Packet_setHandle( uint16_t h ) { Packet_handle = h; }
+
+void Packet_setInt( uint8_t i ) { Packet_int = i; }

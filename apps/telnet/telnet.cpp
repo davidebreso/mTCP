@@ -1,7 +1,7 @@
 /*
 
    mTCP Telnet.cpp
-   Copyright (C) 2009-2023 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2009-2024 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -345,7 +345,7 @@ static char tmpBuf[160];
 
 
 
-static char CopyrightMsg1[] = "mTCP Telnet by M Brutman (mbbrutman@gmail.com) (C)opyright 2009-2023\r\n";
+static char CopyrightMsg1[] = "mTCP Telnet by M Brutman (mbbrutman@gmail.com) (C)opyright 2009-2024\r\n";
 static char CopyrightMsg2[] = "Version: " __DATE__ "\r\n\r\n";
 
 int main( int argc, char *argv[] ) {

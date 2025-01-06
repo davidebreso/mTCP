@@ -1,7 +1,7 @@
 /*
 
    mTCP Dns.cpp
-   Copyright (C) 2008-2023 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2008-2024 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -40,7 +40,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <malloc.h>
 
 #include "dns.h"
 #include "timer.h"

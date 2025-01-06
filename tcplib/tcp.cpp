@@ -1,7 +1,7 @@
 /*
 
    mTCP Tcp.cpp
-   Copyright (C) 2006-2023 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2006-2024 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -124,7 +124,7 @@ int8_t TcpBuffer::init( uint8_t xmitBufs_p ) {
   // tmpSize data type and check for overflow.
 
   uint16_t tmpSize = xmitBufs_p * bufSize;
-  uint8_t *tmp = (uint8_t *)malloc( tmpSize );
+  uint8_t *tmp = (uint8_t *)mTCP_malloc( tmpSize, "LIB_TCP_xmit_bufs" );
 
   if ( tmp == NULL ) {
     TRACE_TCP_WARN(( "Tcp: Mem alloc err on TcpBuffers\n" ));
@@ -390,7 +390,7 @@ int8_t TcpSocket::setRecvBuffer( uint16_t recvBufferSize_p ) {
   // The receive buffer is a ring buffer.  Allocate one extra byte
   // so that we don't have to worry about boundary conditions.
 
-  rcvBuffer = (uint8_t *)malloc( rcvBufSize + 1 );
+  rcvBuffer = (uint8_t *)mTCP_malloc( rcvBufSize + 1, "LIB_TCP_socket_recv_buf" );
   if ( rcvBuffer == NULL ) {
     // This is kind of bad, but not fatal.  Woe to the user who does
     // not check return codes.

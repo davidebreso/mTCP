@@ -1,7 +1,7 @@
 /*
 
    mTCP Inlines.H
-   Copyright (C) 2006-2023 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2006-2024 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -76,8 +76,12 @@ extern uint32_t htonl( uint32_t );
 
 extern uint16_t dosVersion( void );
 #pragma aux dosVersion = \
+  "push bx"              \
+  "push cx"              \
   "mov ah,0x30"          \
   "int 0x21"             \
+  "pop cx"               \
+  "pop bx"               \
   modify [ax]            \
   value [ax];
 

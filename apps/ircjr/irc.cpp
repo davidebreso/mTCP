@@ -1,7 +1,7 @@
 /*
 
    mTCP Irc.cpp
-   Copyright (C) 2008-2023 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2008-2024 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -337,7 +337,7 @@ static char Msg_TopicChanged[] = "%s changed the topic on %s to %s\n";
 
 
 
-static char CopyrightMsg1[] = "mTCP IRCjr by M Brutman (mbbrutman@gmail.com) (C)opyright 2008-2023\n";
+static char CopyrightMsg1[] = "mTCP IRCjr by M Brutman (mbbrutman@gmail.com) (C)opyright 2008-2024\n";
 static char CopyrightMsg2[] = "Version: " __DATE__ "\n\n";
 
 
@@ -646,7 +646,14 @@ void sendMsg( uint8_t *buffer, uint16_t bufferLen ) {
 
   if ( Unicode::XlateTableLoaded( ) == false ) {
 
-    s->send( (uint8_t *)buffer, bufferLen );
+    int bytesSent = 0;
+    while ( bytesSent < bufferLen ) {
+      int rc = s->send( (uint8_t *)buffer, bufferLen );
+      if ( rc > 0 ) bytesSent += rc;
+      PACKET_PROCESS_SINGLE;
+      Arp::driveArp( );
+      Tcp::drivePackets( );
+    }
 
   } else {
 
@@ -675,14 +682,28 @@ void sendMsg( uint8_t *buffer, uint16_t bufferLen ) {
     }
 
     if ( overflow == false ) {
-      s->send( (uint8_t *)unicodeBuffer, outputIndex );
+      int bytesSent = 0;
+      while ( bytesSent < bufferLen ) {
+        int rc = s->send( (uint8_t *)unicodeBuffer, outputIndex );
+        if ( rc > 0 ) bytesSent += rc;
+        PACKET_PROCESS_SINGLE;
+        Arp::driveArp( );
+        Tcp::drivePackets( );
+      }
     }
 
   } // End if UTF-8 enabled.
 
   #else
 
-  s->send( (uint8_t *)buffer, bufferLen );
+  int bytesSent = 0;
+  while ( bytesSent < bufferLen ) {
+    int rc = s->send( (uint8_t *)buffer, bufferLen );
+    if ( rc > 0 ) bytesSent += rc;
+    PACKET_PROCESS_SINGLE;
+    Arp::driveArp( );
+    Tcp::drivePackets( );
+  }
 
   #endif
 
