@@ -85,7 +85,7 @@
 #define FTPSERVERNAME_MAX_LEN  (64) // Max len of the ftp server name
 #define USERINPUTBUF_MAX_LEN  (140) // Max len of input line a user can type
 #define COMMAND_MAX_LEN        (20) // Max len of a user command
-#define FILESPEC_MAX_LEN       (80) // Max len of a filespec
+#define FILESPEC_MAX_LEN      (100) // Max len of a filespec
 #define USERNAME_MAX_LEN       (64) // Max len of a username
 #define PASSWORD_MAX_LEN       (40) // Max len of a password
 
