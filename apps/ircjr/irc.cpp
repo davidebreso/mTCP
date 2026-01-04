@@ -1,7 +1,7 @@
 /*
 
    mTCP Irc.cpp
-   Copyright (C) 2008-2024 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2008-2025 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -337,7 +337,7 @@ static char Msg_TopicChanged[] = "%s changed the topic on %s to %s\n";
 
 
 
-static char CopyrightMsg1[] = "mTCP IRCjr by M Brutman (mbbrutman@gmail.com) (C)opyright 2008-2024\n";
+static char CopyrightMsg1[] = "mTCP IRCjr by M Brutman (mbbrutman@gmail.com) (C)opyright 2008-2025\n";
 static char CopyrightMsg2[] = "Version: " __DATE__ "\n\n";
 
 
@@ -385,7 +385,6 @@ int main( int argc, char *argv[] ) {
   // From this point forward you have to call the shutdown( ) routine to
   // exit because we have the timer interrupt hooked.
 
-
   Screen::init( inputBuffer, &switchToSession );
 
   // Create main session
@@ -400,8 +399,6 @@ int main( int argc, char *argv[] ) {
   initScreen( );
 
   StartTime = time( NULL );
-
-
 
   CS->printf( Session::PrintOpts_none, scNormal, "Connect timeout: %lu  Registration timeout: %lu\n",
                           ConnectTimeout/1000, RegisterTimeout/1000 );
@@ -1484,6 +1481,7 @@ void shutdown( int rc ) {
   puts( "\nIRCjr - Get your daily dose of DOS!" );
   puts( "Please send comments and bug reports to mbbrutman@gmail.com");
 
+  Screen::restoreCursorShape( );
   exit( rc );
 }
 

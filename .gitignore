@@ -29,4 +29,8 @@
 *.exe
 *.out
 *.app
+*.sys
 utils/ptach
+
+# Temporary files
+simple_tmp.asm

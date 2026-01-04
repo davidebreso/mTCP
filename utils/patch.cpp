@@ -1,7 +1,7 @@
 /*
 
    mTCP Patch.cpp
-   Copyright (C) 2010-2024 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2010-2025 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -32,6 +32,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 
 
@@ -40,8 +41,8 @@
 int nheapgrowFound = 0;
 int isNonIBMFound = 0;
 
-unsigned long int targetSeg, targetOff;    // location of __CMain_nheapgrow_ symbol
-unsigned long int targetSeg2, targetOff2;  // location of __is_nonIBM_ symbol
+uint32_t targetSeg, targetOff;    // location of __CMain_nheapgrow_ symbol
+uint32_t targetSeg2, targetOff2;  // location of __is_nonIBM_ symbol
 
 char exeFilename[40];
 char mapFilename[40];
@@ -74,9 +75,9 @@ int readMapFile( void ) {
 
     char tmpFuncName[256];
 
-    unsigned long int tSeg, tOff;
+    uint32_t tSeg, tOff;
 
-    if ( sscanf( buffer, "%lx:%lx %s\n", &tSeg, &tOff, tmpFuncName ) == 3  ) {
+    if ( sscanf( buffer, "%x:%x %s\n", &tSeg, &tOff, tmpFuncName ) == 3  ) {
       if ( strcmp( tmpFuncName, "__CMain_nheapgrow_" ) == 0 ) {
         targetSeg = tSeg; targetOff = tOff;
         printf( "  Found __CMain_nheapgrow_ in map file at %04x:%04x\n", targetSeg, targetOff );
@@ -84,7 +85,7 @@ int readMapFile( void ) {
       }
     }
 
-    if ( sscanf( buffer, "%lx:%lx+ %s\n", &tSeg, &tOff, tmpFuncName ) == 3  ) {
+    if ( sscanf( buffer, "%x:%x+ %s\n", &tSeg, &tOff, tmpFuncName ) == 3  ) {
       if ( strcmp( tmpFuncName, "__is_nonIBM_" ) == 0 ) {
         targetSeg2 = tSeg; targetOff2 = tOff;
         printf( "  Found __is_nonIBM_ in map file at %04x:%04x\n", targetSeg2, targetOff2 );
@@ -104,7 +105,7 @@ int readMapFile( void ) {
 
 int main( int argc, char *argv[] ) {
 
-  puts( "Patch" );
+  puts( "mTCP Watcom patcher by M Brutman (mbbrutman@gmail.com) (C)opyright 2010-2025\n" );
   fflush( NULL );
 
   if ( argc < 4 ) {
@@ -152,16 +153,16 @@ int main( int argc, char *argv[] ) {
     return 1;
   }
 
-  unsigned long int headerSize = (buffer[9]*256 + buffer[8]) * 16lu;
-  unsigned long int initialCodeSegment = buffer[0x17]*256 + buffer[0x16];
+  uint32_t headerSize = (buffer[9]*256 + buffer[8]) * 16lu;
+  uint32_t initialCodeSegment = buffer[0x17]*256 + buffer[0x16];
 
   if ( targetSeg != initialCodeSegment ) {
-    printf( "  Target segment %x doesn't match initial code segment; didn't plan for this\n", targetSeg, initialCodeSegment );
+    printf( "  Target segment %x doesn't match initial code segment %x; didn't plan for this\n", targetSeg, initialCodeSegment );
     return 1;
   }
 
-  printf( "  Header size in bytes: %lu\n", headerSize );
-  printf( "  Code Segment offset: %lu\n", initialCodeSegment );
+  printf( "  Header size in bytes: %u\n", headerSize );
+  printf( "  Code Segment offset: %u\n", initialCodeSegment );
 
 
   if ( nheapgrowFound ) {

@@ -1,7 +1,7 @@
 /*
 
    mTCP FtpCl.h
-   Copyright (C) 2009-2024 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2009-2025 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -47,6 +47,7 @@
 
 #include "ftpusr.h"
 
+#pragma pack(1)
 
 class FtpClient {
 

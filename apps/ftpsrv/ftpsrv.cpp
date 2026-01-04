@@ -1,7 +1,7 @@
 /*
 
    mTCP FtpSrv.cpp
-   Copyright (C) 2009-2024 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2009-2025 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -407,7 +407,7 @@ int ShutdownRequested = 0;
 
 static char ConfirmEndMsg[] = "Press Ctrl-C or Alt-X one more time to shut down or another key to cancel.\n";
 
-static char CopyrightMsg1[] = "mTCP FtpSrv by M Brutman (mbbrutman@gmail.com) (C)opyright 2010-2024\n";
+static char CopyrightMsg1[] = "mTCP FtpSrv by M Brutman (mbbrutman@gmail.com) (C)opyright 2010-2025\n";
 static char CopyrightMsg2[] = "Version: " __DATE__ "\n\n";
 
 int main( int argc, char *argv[] ) {

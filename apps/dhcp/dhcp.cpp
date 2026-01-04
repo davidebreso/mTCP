@@ -1,7 +1,7 @@
 /*
 
    mTCP Dhcp.cpp
-   Copyright (C) 2008-2024 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2008-2025 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -172,7 +172,7 @@ const char *DhcpMsgName[] = {
 
 const char *CheckYourCabling_msg = "Check your cabling and packet driver settings, including the hardware IRQ.";
 
-static char *CopyrightMsg = "mTCP DHCP Client by M Brutman (mbbrutman@gmail.com) (C)opyright 2008-2024\nVersion: " __DATE__ "\n\n";
+static char *CopyrightMsg = "mTCP DHCP Client by M Brutman (mbbrutman@gmail.com) (C)opyright 2008-2025\nVersion: " __DATE__ "\n\n";
 
 
 
@@ -1041,8 +1041,7 @@ void usage( FILE *stream ) {
     "Options:\n"
     "  -help\n"
     "  -retries <n>   Retry n times before giving up\n"
-    "  -timeout <n>   Set timeout for each attempt to n seconds\n"
-    "  -packetstats   Show packet statistics at the end\n\n"
+    "  -timeout <n>   Set timeout for each attempt to n seconds\n\n"
   );
   exit( 1 );
 }

@@ -1,7 +1,7 @@
 /*
 
    mTCP Tcp.cpp
-   Copyright (C) 2006-2024 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2006-2025 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -991,10 +991,7 @@ int16_t TcpSocket::enqueue( TcpBuffer *buf ) {
 // resendPacket
 //
 // Assumes ARP resolution is done already, and that we are resending
-// because of a dropped packet.
-//
-// We don't ARP to ensure that the target is still at the same MAC addr.
-//
+// because of a dropped packet.  But we'll re-ARP just in case.
 
 void near TcpSocket::resendPacket( TcpBuffer *buf ) {
 
@@ -1003,6 +1000,11 @@ void near TcpSocket::resendPacket( TcpBuffer *buf ) {
   TRACE_TCP(( "Tcp: (%08lx) Resend: Buf=%08lx Seq=%08lx Tries=%u\n",
           this, buf, ntohl( packetPtr->tcp.seqnum ), buf->attempts ));
 
+  // Some voodoo ... this should not be needed and won't complete in time
+  // for this packet going out, but kick off an ARP request just in case.
+  // We retry a few times so this should help later packets if a router
+  // is going numb on us.  (Looking at you Asus.)
+  Arp::sendArpRequestPacket( buf->headers.ip.ip_dest );
 
   // We do redo the IP header because the IP ident field should be changed
   // on a resent packet, which requires a new checksum.  We are definitely

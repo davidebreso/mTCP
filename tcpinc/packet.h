@@ -1,7 +1,7 @@
 /*
 
    mTCP Packet.H
-   Copyright (C) 2005-2024 Michael B. Brutman (mbbrutman@gmail.com)
+   Copyright (C) 2005-2025 Michael B. Brutman (mbbrutman@gmail.com)
    mTCP web page: http://www.brutman.com/mTCP
 
 
@@ -275,9 +275,9 @@ extern const char * PKT_DRVR_EYE_CATCHER;
 //
 extern uint32_t Packets_dropped;
 extern uint32_t Packets_received;
-extern uint32_t Packets_sent;
-extern uint32_t Packets_send_errs;
-extern uint32_t Packets_send_retries;
+extern uint32_t Packets_sent;            // Calls to Packet_send_pkt, not actual packets sent.
+extern uint32_t Packets_send_errs;       // Calls to Packet_send_pkt where no packet ever got sent even with retries.
+extern uint32_t Packets_send_retries;    // Number of times Packet_send_pkt retried a send after getting a bad code.
 
 
 
